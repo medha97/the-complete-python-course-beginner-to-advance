@@ -29,14 +29,16 @@ player_items = [{"item": potion, "quantity":15}, {"item": hipotion, "quantity":5
                 {"item": superpotion, "quantity":5}, {"item": elixer, "quantity":5},
                 {"item": hielixer, "quantity":2}, {"item": grenade, "quantity":2}]
 
-player1 = Person("Valos:", 3260, 132, 514, 34, player_spell, player_items)
-player2 = Person("Nick :", 4160, 188, 617, 34, player_spell, player_items)
-player3 = Person("Robot:",3089, 174, 615, 34, player_spell, player_items)
-enemy = Person("magus",11200, 221, 315, 25, [], [])
+player1 = Person("Valos:", 3260, 132, 300, 34, player_spell, player_items)
+player2 = Person("Nick :", 4160, 188, 311, 34, player_spell, player_items)
+player3 = Person("Robot:",3089, 174, 288, 34, player_spell, player_items)
+
+enemy1 = Person("Imp  ",1250, 130, 560, 325, [], [])
+enemy2 = Person("magus",11200, 221, 525, 25, [], [])
+enemy3 = Person("Imp  ",1250, 130, 560, 325, [], [])
 
 players = [player1, player2, player3]
-
-
+enemies = [enemy1, enemy2, enemy3]
 
 running = True
 i=0
@@ -52,8 +54,8 @@ while running:
             play.get_stats()
 
         print("\n")
-
-        enemy.get_enemy_stats()
+        for enemy in enemies:
+            enemy.get_enemy_stats()
 
         player.choose_action()
         choice = input("Choose Action")
@@ -62,8 +64,13 @@ while running:
 
         if index == 0:
             dmg = player.generate_damage()
-            enemy.take_damage(dmg)
-            print("you attacked for", dmg, "points of damage. Enemy HP", enemy.get_hp())
+            enemy = player.choose_target(enemies)
+            enemies[enemy].take_damage(dmg)
+            print("you attacked"+enemies[enemy].name+"for", dmg, "points of damage. Enemy HP", str(enemies[enemy].get_hp()))
+
+            if enemies[enemy].get_hp() == 0:
+                print(enemies[enemy].name + "has died.")
+                del enemies[enemy]
 
         elif index == 1:
             player.choose_magic()
@@ -88,8 +95,14 @@ while running:
                 print(  "\n" + spell.name + "heals for", str(magic_dmg), "HP" )
 
             elif spell.type == "black":
-                enemy.take_damage(magic_dmg)
-                print("\n" + spell.name + " deals", str(magic_dmg), "points of damage" )
+                enemy = player.choose_target(enemies)
+                enemies[enemy].take_damage(magic_dmg)
+
+                print("\n" + spell.name + " deals", str(magic_dmg), "points of damage to"+enemies[enemy].name )
+
+                if enemies[enemy].get_hp() == 0:
+                    print(enemies[enemy].name + "has died.")
+                    del enemies[enemy]
 
         elif index == 2:
             player.choose_item()
@@ -118,19 +131,36 @@ while running:
                 print("\n" + item["item"].name + "fully restores HP/MP")
 
             elif item["item"].type == "attack":
-                enemy.take_damage(item.prop)
-                print("\n" + item.name + "deals", str(item.prop), "points of daamge")
+                enemy = player.choose_target(enemies)
+                enemies[enemy].take_damage(item.prop)
+
+                print("\n" + item.name + "deals", str(item.prop), "points of damage")
+
+                if enemies[enemy].get_hp() == 0:
+                    print(enemies[enemy].name + "has died.")
+                    del enemies[enemy]
 
         enemy_choice = 1
         target = random.randrange(0,3)
-        enemy_dmg = enemy.generate_damage()
+        enemy_dmg = enemies[0].generate_damage()
         players[target].take_damage(enemy_dmg)
 
         print("Enemy attacked for", enemy_dmg, "Player HP", player.get_hp())
 
-        if enemy.get_hp() == 0:
-            print( "you win!")
+        defeated_enemies = 0
+        defeated_players = 0
+
+        for player in players:
+            if player.get_hp() == 0:
+                defeated_players += 1
+
+        for enemy in enemies:
+            if enemy.get_hp() == 0:
+                defeated_enemies += 1
+        if defeated_enemies == 2:
+            print("You Win!")
             running = False
-        elif player.get_hp() == 0:
+
+        if defeated_players == 2:
             print( "Your enemy has defeated you!")
             running = False
