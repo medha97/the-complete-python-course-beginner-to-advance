@@ -84,6 +84,29 @@ class Person:
             print("    " + str(i) + ".", item["item"].name, ":", item["item"].description, "(x"+str(item["quantity"])+")")
             i += 1
 
+    def get_enemy_stats(self):
+        hp_bar = ""
+        bar_ticks = (self.hp / self.max_hp) * 100 / 2
+
+        while bar_ticks > 0:
+            hp_bar += "█"
+            bar_ticks -= 1
+
+        while len(hp_bar) < 50:
+            hp_bar += " "
+
+        hp_string = str(self.hp) + "/" + str(self.max_hp)
+        current_hp = ""
+        if len(hp_string) < 11:
+            decreased = 11 - len(hp_string)
+            while decreased > 0:
+                current_hp += " "
+                decreased -= 1
+
+        print("                     __________________________________________________")
+        print(self.name+"   "+str(self.hp)+"/"+str(self.max_hp)+current_hp+" |"+hp_bar+"|")
+
+
     def get_stats(self):
         hp_bar = ""
         bar_ticks = (self.hp / self.max_hp) * 100 / 4
@@ -120,6 +143,6 @@ class Person:
                 current_mp += " "
                 decreased -= 1
 
-        print("                    _________________________                __________")
+        print("                    _________________________               __________")
         print(self.name+"   "+str(self.hp)+"/"+str(self.max_hp)+current_hp+" |"+hp_bar+"|"
         +"    "+str(self.mp)+"/"+str(self.max_mp)+current_mp+"|"+mp_bar+"|")

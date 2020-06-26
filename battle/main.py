@@ -1,6 +1,7 @@
 from classes.game import Person, bcolors
 from classes.magic import spell
 from classes.inventory import item
+import random
 
 
 #create black magic
@@ -28,9 +29,9 @@ player_items = [{"item": potion, "quantity":15}, {"item": hipotion, "quantity":5
                 {"item": superpotion, "quantity":5}, {"item": elixer, "quantity":5},
                 {"item": hielixer, "quantity":2}, {"item": grenade, "quantity":2}]
 
-player1 = Person("Valos:", 3260, 132, 60, 34, player_spell, player_items)
-player2 = Person("Nick :", 4160, 188, 60, 34, player_spell, player_items)
-player3 = Person("Robot:",3089, 174, 60, 34, player_spell, player_items)
+player1 = Person("Valos:", 3260, 132, 514, 34, player_spell, player_items)
+player2 = Person("Nick :", 4160, 188, 617, 34, player_spell, player_items)
+player3 = Person("Robot:",3089, 174, 615, 34, player_spell, player_items)
 enemy = Person("magus",11200, 221, 315, 25, [], [])
 
 players = [player1, player2, player3]
@@ -49,7 +50,11 @@ while running:
         print("NAME              HP                                   MP")
         for play in players:
             play.get_stats()
-            print("\n")
+
+        print("\n")
+
+        enemy.get_enemy_stats()
+
         player.choose_action()
         choice = input("Choose Action")
         print("You choose", choice)
@@ -103,8 +108,13 @@ while running:
                 print("\n" + item["item"].name + "heals for", str(item["item"].prop), "HP")
 
             elif item["item"].type == "elixer":
-                player.hp = player.max_hp
-                player.mp = player.max_mp
+                if item["item"].name == "MegaElixer":
+                    for i in players:
+                        i.hp = i.max_hp
+                        i.mp = i.max_mp
+                else:
+                    player.hp = player.max_hp
+                    player.mp = player.max_mp
                 print("\n" + item["item"].name + "fully restores HP/MP")
 
             elif item["item"].type == "attack":
@@ -112,31 +122,15 @@ while running:
                 print("\n" + item.name + "deals", str(item.prop), "points of daamge")
 
         enemy_choice = 1
-
+        target = random.randrange(0,3)
         enemy_dmg = enemy.generate_damage()
-        player.take_damage(enemy_dmg)
+        players[target].take_damage(enemy_dmg)
+
         print("Enemy attacked for", enemy_dmg, "Player HP", player.get_hp())
 
-        print("--------------------------------------------")
-        print("Enemy HP:",  str(enemy.get_hp()) + "/" + str(enemy.get_max_hp()) + "\n")
-
-        print("Your HP:",  str(player.get_hp()) + "/" + str(player.get_max_hp()) +"\n")
-        print("Your MP:", str(player.get_mp()) + "/" + str(player.get_max_mp()) )
         if enemy.get_hp() == 0:
             print( "you win!")
             running = False
         elif player.get_hp() == 0:
             print( "Your enemy has defeated you!")
             running = False
-
-
-
-
-
-
-
-
-'''print(player.generate_spell_damage(0))
-print(player.generate_spell_damage(1))
-print(player.generate_damage())
-'''
