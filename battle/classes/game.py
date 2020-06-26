@@ -104,6 +104,22 @@ class Person:
         while len(mp_bar)<10:
             mp_bar += " "
 
-        print("                    _________________________              __________")
-        print(self.name+"   "+str(self.hp)+"/"+str(self.max_hp)+" |"+hp_bar+"|"
-        +"    "+str(self.mp)+"/"+str(self.max_mp)+" |"+mp_bar+"|")
+        hp_string = str(self.hp) + "/" + str(self.max_hp)
+        current_hp = ""
+        if len(hp_string) < 9:
+            decreased = 9 - len(hp_string)
+            while decreased > 0:
+                current_hp += " "
+                decreased -= 1
+
+        mp_string = str(self.mp) + "/" + str(self.max_mp)
+        current_mp = ""
+        if len(mp_string) < 9:
+            decreased = 9 - len(mp_string)
+            while decreased > 0:
+                current_mp += " "
+                decreased -= 1
+
+        print("                    _________________________                __________")
+        print(self.name+"   "+str(self.hp)+"/"+str(self.max_hp)+current_hp+" |"+hp_bar+"|"
+        +"    "+str(self.mp)+"/"+str(self.max_mp)+current_mp+"|"+mp_bar+"|")
