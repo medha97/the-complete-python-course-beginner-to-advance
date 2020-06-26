@@ -28,10 +28,10 @@ player_items = [{"item": potion, "quantity":15}, {"item": hipotion, "quantity":5
                 {"item": superpotion, "quantity":5}, {"item": elixer, "quantity":5},
                 {"item": hielixer, "quantity":2}, {"item": grenade, "quantity":2}]
 
-player1 = Person("Valos:", 460, 65, 60, 34, player_spell, player_items)
-player2 = Person("Nick :", 460, 65, 60, 34, player_spell, player_items)
-player3 = Person("Robot:",460, 65, 60, 34, player_spell, player_items)
-enemy = Person("magus",1200, 65, 54, 25, [], [])
+player1 = Person("Valos:", 3260, 132, 60, 34, player_spell, player_items)
+player2 = Person("Nick :", 4160, 188, 60, 34, player_spell, player_items)
+player3 = Person("Robot:",3089, 174, 60, 34, player_spell, player_items)
+enemy = Person("magus",11200, 221, 315, 25, [], [])
 
 players = [player1, player2, player3]
 
@@ -43,13 +43,13 @@ i=0
 print("AN ENEMY ATTACK")
 
 while running:
-    print('==============================')
-    print("\n\n")
-    print("NAME              HP                                   MP")
     for player in players:
-        player.get_stats()
-        print("\n")
-    for player in players:
+        print('==============================')
+        print("\n\n")
+        print("NAME              HP                                   MP")
+        for play in players:
+            play.get_stats()
+            print("\n")
         player.choose_action()
         choice = input("Choose Action")
         print("You choose", choice)
@@ -105,7 +105,7 @@ while running:
             elif item["item"].type == "elixer":
                 player.hp = player.max_hp
                 player.mp = player.max_mp
-                print("\n" + item.name + "fully restores HP/MP")
+                print("\n" + item["item"].name + "fully restores HP/MP")
 
             elif item["item"].type == "attack":
                 enemy.take_damage(item.prop)

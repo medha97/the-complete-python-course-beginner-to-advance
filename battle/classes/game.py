@@ -85,6 +85,25 @@ class Person:
             i += 1
 
     def get_stats(self):
-        print("                  _________________________            __________")
-        print(self.name+"   "+str(self.hp)+"/"+str(self.max_hp)+" |██████                   |"
-        +"    "+str(self.mp)+"/"+str(self.max_mp)+" |███       |")
+        hp_bar = ""
+        bar_ticks = (self.hp / self.max_hp) * 100 / 4
+
+        mp_bar = ""
+        mp_ticks = (self.mp / self.max_mp) * 100 / 10
+
+        while bar_ticks > 0:
+            hp_bar += "█"
+            bar_ticks -= 1
+        while len(hp_bar)<25:
+            hp_bar += " "
+
+        while mp_ticks > 0:
+            mp_bar += "█"
+            mp_ticks -= 1
+
+        while len(mp_bar)<10:
+            mp_bar += " "
+
+        print("                    _________________________              __________")
+        print(self.name+"   "+str(self.hp)+"/"+str(self.max_hp)+" |"+hp_bar+"|"
+        +"    "+str(self.mp)+"/"+str(self.max_mp)+" |"+mp_bar+"|")
