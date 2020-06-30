@@ -1,11 +1,14 @@
 import pymongo
 from pymongo import MongoClient
+import datetime
+
 myclient = MongoClient()
 db = myclient.mydb
 Users = db.users
-users = [{"username": "third","password": "12345"},{"username":"red", "password": "blue"}]
-inserted = Users.insert_many(users)
-inserted.inserted_ids
-Users.find().count()
-User.find({"fav_number": 445}).count()
-User.find({"fav_number": 445, "username":"nick"}).count()
+
+curent_date = datetime.datetime.now()
+old_date = datetime.datetime(2009, 8, 12)
+
+old = Users.insert_one({"username": "ffie", "date":curent_date})
+print(Users.find({"date": {"$gte": old_date}}).count())
+print(Users.find({"date": {"$exists": True}}).count())
